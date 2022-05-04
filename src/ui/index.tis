@@ -336,6 +336,37 @@ function editDirectAccessPort() {
       });
 }
 
+class LanguageBar: Reactor.Component
+{
+    function render() {
+        var value = handler.get_local_option("lang") || "en";
+        var me = this;
+        self.timer(1ms, function() { (me.select_lang || {}).value = value; });
+        return <div style="position:absolute;top:0.5em;right:0.5em">
+            <select .select-lang @{this.select_lang}>
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="it">Italiano</option>
+                <option value="ptbr">Português (Brasil)</option>
+                <option value="ru">Русский</option>
+                <option value="cn">中文 (简体)</option>
+                <option value="tw">中文 (繁体)</option>
+            </select>
+        </div>;
+    }
+
+    event change $(.select-lang) (_, el) {
+        this.onChange(el.value);
+    }
+    
+    function onChange(v) {
+        handler.set_local_option("lang", v);
+        app.update();
+    }
+}
+
 class App: Reactor.Component
 {
     function this() {
@@ -386,6 +417,7 @@ class App: Reactor.Component
                         <MultipleSessions @{this.multipleSessions} />
                     </div>
                     <ConnectStatus @{this.connect_status} />
+                    <LanguageBar />
                 </div>
                 <div #msgbox />
             </div>;
