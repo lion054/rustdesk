@@ -87,6 +87,7 @@ class DirectServer: Reactor.Component {
 
 var myIdMenu;
 var audioInputMenu;
+var languageMenu;
 class AudioInputs: Reactor.Component {
     function this() {
         audioInputMenu = this;
@@ -144,6 +145,56 @@ class AudioInputs: Reactor.Component {
     }
 }
 
+class LanguagePicker: Reactor.Component
+{
+    function this() {
+        languageMenu = this;
+    }
+
+    function render() {
+        if (!this.show) return <li />;
+        var me = this;
+        self.timer(1ms, function() { me.toggleMenuState() });
+        return <li>{translate('Language')}
+            <menu #language-picker>
+                <li id="de"><span>{svg_checkmark}</span>Deutsch</li>
+                <li id="en"><span>{svg_checkmark}</span>English</li>
+                <li id="es"><span>{svg_checkmark}</span>Español</li>
+                <li id="fr"><span>{svg_checkmark}</span>Français</li>
+                <li id="it"><span>{svg_checkmark}</span>Italiano</li>
+                <li id="ptbr"><span>{svg_checkmark}</span>Português (Brasil)</li>
+                <li id="ru"><span>{svg_checkmark}</span>Русский</li>
+                <li id="cn"><span>{svg_checkmark}</span>中文 (简体)</li>
+                <li id="tw"><span>{svg_checkmark}</span>中文 (繁体)</li>
+            </menu>
+        </li>;
+    }
+
+    function get_default() {
+        return "en";
+    }
+
+    function get_value() {
+        return handler.get_local_option("lang") || this.get_default();
+    }
+
+    function toggleMenuState() {
+        var v = this.get_value();
+        for (var el in this.$$(menu#language-picker>li)) {
+            var selected = el.id == v;
+            el.attributes.toggleClass("selected", selected);
+        }
+    }
+
+    event click $(menu#language-picker>li) (_, me) {
+        var v = me.id;
+        if (v == this.get_value()) return;
+        handler.set_local_option("lang", v);
+        app.update();
+        this.toggleMenuState();
+    }
+}
+
 class MyIdMenu: Reactor.Component {
     function this() {
         myIdMenu = this;
@@ -173,6 +224,7 @@ class MyIdMenu: Reactor.Component {
                 <li #stop-service><span>{svg_checkmark}</span>{translate("Enable Service")}</li>
                 <DirectServer />
                 <div .separator />
+                <LanguagePicker />
                 <li #about>{translate('About')} {" "} {handler.get_app_name()}</li>
             </menu>
         </popup>;
@@ -184,6 +236,7 @@ class MyIdMenu: Reactor.Component {
 
     function showSettingMenu() {
         audioInputMenu.update({ show: true });
+        languageMenu.update({ show: true });
         this.toggleMenuState();
         if (direct_server) direct_server.update();
         var menu = this.$(menu#config-options);
@@ -336,37 +389,6 @@ function editDirectAccessPort() {
       });
 }
 
-class LanguageBar: Reactor.Component
-{
-    function render() {
-        var value = handler.get_local_option("lang") || "en";
-        var me = this;
-        self.timer(1ms, function() { (me.select_lang || {}).value = value; });
-        return <div style="position:absolute;top:0.5em;right:0.5em">
-            <select .select-lang @{this.select_lang}>
-                <option value="de">Deutsch</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="it">Italiano</option>
-                <option value="ptbr">Português (Brasil)</option>
-                <option value="ru">Русский</option>
-                <option value="cn">中文 (简体)</option>
-                <option value="tw">中文 (繁体)</option>
-            </select>
-        </div>;
-    }
-
-    event change $(.select-lang) (_, el) {
-        this.onChange(el.value);
-    }
-    
-    function onChange(v) {
-        handler.set_local_option("lang", v);
-        app.update();
-    }
-}
-
 class App: Reactor.Component
 {
     function this() {
@@ -417,7 +439,6 @@ class App: Reactor.Component
                         <MultipleSessions @{this.multipleSessions} />
                     </div>
                     <ConnectStatus @{this.connect_status} />
-                    <LanguageBar />
                 </div>
                 <div #msgbox />
             </div>;

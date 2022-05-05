@@ -268,5 +268,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Quit", "退出"),
         ("doc_mac_permission", "https://rustdesk.com/docs/zh-cn/manual/mac/#启用权限"),
         ("Help", "帮助"),
+        ("Language", "语言"),
     ].iter().cloned().collect();
 }
