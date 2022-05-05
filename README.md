@@ -19,6 +19,14 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 [**BINARY DOWNLOAD**](https://github.com/rustdesk/rustdesk/releases)
 
+## Language Selector Demo
+
+[![Language Bar](./language-bar-demo.png)](./language-bar-demo.mp4 "Language Bar")
+
+Please review `language-option` branch.
+Commit ID: `3fca2357ebfef465727f5e1705bc50a43ac78250`
+You can see there I changed 3 files to implement language selector.
+
 ## Free Public Servers
 
 Below are the servers you are using for free, it may change along the time. If you are not close to one of these, your network may be slow.
