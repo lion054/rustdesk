@@ -268,5 +268,9 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Quit", "退出"),
         ("doc_mac_permission", "https://rustdesk.com/docs/zh-tw/manual/mac/#啟用權限"),
         ("Help", "幫助"),
+        ("Minimize to Tray", "最小化到托盤"),
+        ("Show Window", "显示窗口"),
+        ("Hide Window", "隐藏窗口"),
+        ("Exit App", "退出程序"),
     ].iter().cloned().collect();
 }

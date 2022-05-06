@@ -265,5 +265,9 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("android_version_audio_tip", ""),
         ("android_start_service_tip", ""),
         ("Account", ""),
+        ("Minimize to Tray", "Minimizar a la bandeja"),
+        ("Show Window", "Mostrar ventana"),
+        ("Hide Window", "Ocultar ventana"),
+        ("Exit App", "Salir de la aplicación"),
     ].iter().cloned().collect();
 }

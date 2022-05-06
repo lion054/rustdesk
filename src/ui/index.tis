@@ -85,6 +85,25 @@ class DirectServer: Reactor.Component {
     }
 }
 
+var minimize_to_tray;
+class MinimizeToTray: Reactor.Component {
+    function this() {
+        minimize_to_tray = this;
+    }
+
+    function render() {
+        var text = translate("Minimize to Tray");
+        var enabled = handler.get_local_option("enable-tray") == "Y";
+        var cls = enabled ? "selected" : "";
+        return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;
+    }
+    
+    function onClick() {
+        handler.set_local_option("enable-tray", handler.get_local_option("enable-tray") == "Y" ? "" : "Y");
+        this.update();
+    }
+}
+
 var myIdMenu;
 var audioInputMenu;
 class AudioInputs: Reactor.Component {
@@ -173,6 +192,7 @@ class MyIdMenu: Reactor.Component {
                 <li #stop-service><span>{svg_checkmark}</span>{translate("Enable Service")}</li>
                 <DirectServer />
                 <div .separator />
+                <MinimizeToTray />
                 <li #about>{translate('About')} {" "} {handler.get_app_name()}</li>
             </menu>
         </popup>;
@@ -346,11 +366,11 @@ class App: Reactor.Component
         var is_can_screen_recording = handler.is_can_screen_recording(false);
         return
             <div .app>
-                    <popup><menu.context #edit-password-context>
-                        <li #refresh-password>{translate('Refresh random password')}</li>
-                        <li #set-password>{translate('Set your own password')}</li>
-                    </menu></popup>
-                    <div .left-pane>
+                <popup><menu.context #edit-password-context>
+                    <li #refresh-password>{translate('Refresh random password')}</li>
+                    <li #set-password>{translate('Set your own password')}</li>
+                </menu></popup>
+                <div .left-pane>
                     <div>
                         <div .title>{translate('Your Desktop')}</div>
                         <div .lighter-text>{translate('desk_tip')}</div>
@@ -782,6 +802,15 @@ function self.ready() {
     }
     if (!handler.get_remote_id()) {
         view.focus = $(#remote_id);
+    }
+    Tray.init(true, "RustDesk", "../tray-icon.ico");
+}
+
+view.root << event closerequest(evt) {
+    var enabled = handler.get_local_option("enable-tray");
+    if (enabled) {
+        evt.cancel = true;
+        view.state = View.WINDOW_HIDDEN;
     }
 }
 

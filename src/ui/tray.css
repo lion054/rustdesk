@@ -1,0 +1,36 @@
+* {
+    margin: 0dip;
+    padding: 0dip;
+}
+
+html {
+    /* min-width: 150dip; */
+    width: max-content;
+    height: max-content;
+    background: transparent;
+    overflow: hidden;
+}
+
+body {
+    width: max-content;
+    height: max-content;
+    border: #ccc solid 1px;
+    /* border-radius: 4dip; */
+    overflow: hidden;
+    background: #f0f0f0;
+    /* box-shadow: 0 4px 6px rgba(50,50,93,0.7), 0 1px 3px rgba(0,0,0,0.4);
+    margin: 5dip; */
+}
+
+li {
+    display: block;
+    padding: 8dip;
+    background: #fff;
+    font-size: 12dip;
+    /* font-weight: 500;
+    color: #222; */
+}
+
+li:hover {
+    background: #ddd;
+}

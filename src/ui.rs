@@ -675,12 +675,17 @@ impl UI {
     fn is_xfce(&self) -> bool {
         crate::platform::is_xfce()
     }
+
+    fn quit_app(&self) {
+        std::process::exit(0);
+    }
 }
 
 impl sciter::EventHandler for UI {
     sciter::dispatch_script_call! {
         fn t(String);
         fn is_xfce();
+        fn quit_app();
         fn get_id();
         fn get_password();
         fn update_password(String);

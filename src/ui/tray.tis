@@ -1,0 +1,105 @@
+const Tray = {
+    center: true,
+    menu: undefined,
+    init: function (init = true, content = "Welcome!", icon = "trayicon.png") {
+        if (init) {
+            view.trayIcon {
+                image: self.loadImage(self.url(icon)),
+                text: content
+            };
+        } else {
+            view.trayIcon(#remove);
+        }
+    }
+}
+
+view << event trayicon-click(evt) {
+    if (evt.buttons == 1) {
+        view.state = View.WINDOW_SHOWN;
+        view.focus = self;
+        view.windowTopmost = true;
+        view.windowTopmost = false;
+    } else {
+        if (Tray.menu?.isElement) {
+            Tray.menu.focus = self;
+            var (tx, ty) = view.trayIcon(#place);
+            var (sx, sy) = view.box(#position, #client, #screen);
+            self.popup(Tray.menu, (Tray.center ? 2 : 1), tx - sx, ty - sy);
+        } else {
+            if (Tray.menu == undefined) {
+                Tray.menu = View.all.find(:v: v.id == "traymenu");
+            }
+            if (Tray.menu == undefined) {
+                Tray.menu = view.window {
+                    url: self.url("tray.html"),
+                    state: View.WINDOW_HIDDEN,
+                    type: View.POPUP_WINDOW
+                };
+                Tray.menu.id = "traymenu";
+            }
+
+            var x, y;
+            var (w, h) = Tray.menu.box(#dimension);
+            // var w = Tray.menu.root.intrinsicWidthMax();
+            // var h = Tray.menu.root.intrinsicHeight();
+            var (tx, ty, tw, th) = view.trayIcon(#place);
+            var (sX1, sY1, sX2, sY2) = view.screenBox(#workarea, #rect);
+            if (Tray.center) {
+                if (tx < sX1) {
+                    x = sX1;
+                } else if (tx > sX2) {
+                    x = sX2 - w;
+                } else {
+                    x = (tx - w / 2) + tw / 2;
+                }
+                if (ty < sY1 * 4) {
+                    y = ty + th;
+                } else if (ty > sY2) {
+                    y = sY2 - h;
+                } else {
+                    y = ty - h;
+                }
+                if (tx < sX1 || tx - sX2 > 0) {
+                    y += h / 2;
+                }
+            } else {
+                if (tx < (sX1*4)) {
+                    x = tx;
+                } else if (tx > sX2) {
+                    x = sX2 - w;
+                } else {
+                    x = tx;
+                }
+                if (ty < sY1 * 4) {
+                    y = ty + th;
+                } else if (ty > sY2) {
+                    y = sY2 - h;
+                } else {
+                    y = ty - h;
+                }
+            }
+
+            Tray.menu.move(x.limit(0, sX2 - w), y.limit(0, sY2 - h), w, h, true);
+            Tray.menu.state = View.WINDOW_SHOWN;
+            Tray.menu.windowTopmost = true;
+            Tray.menu.focus = self;
+
+            // Functions for tray.htm
+            Tray.menu.root.on("click", "#show", () => {
+                view.state = View.WINDOW_SHOWN;
+            });
+            Tray.menu.root.on("click", "#hide", () => {
+                view.state = View.WINDOW_HIDDEN;
+            });
+            Tray.menu.root.on("click", "#exit", () => {
+                Tray.init(false);
+                handler.quit_app();
+            });
+            Tray.menu.on("activate", (as) => {
+                if (as === false) {
+                    Tray.menu.state = View.WINDOW_HIDDEN;
+                }
+            });
+        }
+    }
+}

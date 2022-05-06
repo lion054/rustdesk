@@ -267,5 +267,9 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Account", "Аккаунт"),
         ("Quit", "Выйти"),
         ("Help", "Помощь"),
+        ("Minimize to Tray", "Свернуть в трей"),
+        ("Show Window", "Витрина"),
+        ("Hide Window", "Скрыть окно"),
+        ("Exit App", "Выйти из приложения"),
     ].iter().cloned().collect();
 }
