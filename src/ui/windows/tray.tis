@@ -31,7 +31,7 @@ view << event trayicon-click(evt) {
             }
             if (Tray.menu == undefined) {
                 Tray.menu = view.window {
-                    url: self.url("tray.html"),
+                    url: self.url("windows/tray.html"),
                     state: View.WINDOW_HIDDEN,
                     type: View.POPUP_WINDOW
                 };

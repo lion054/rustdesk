@@ -101,9 +101,9 @@ class MinimizeToTray: Reactor.Component {
     function onClick() {
         handler.set_local_option("enable-tray", handler.get_local_option("enable-tray") == "Y" ? "" : "Y");
         if (handler.get_local_option("enable-tray") == "Y") {
-            Tray.init(true, "RustDesk", "../tray-icon.ico");
+            if (is_win) Tray.init(true, "RustDesk", "../tray-icon.ico");
         } else {
-            Tray.init(false);
+            if (is_win) Tray.init(false);
         }
         this.update();
     }
@@ -809,7 +809,7 @@ function self.ready() {
         view.focus = $(#remote_id);
     }
     if (handler.get_local_option("enable-tray") == "Y") {
-        Tray.init(true, "RustDesk", "../tray-icon.ico");
+        if (is_win) Tray.init(true, "RustDesk", "../tray-icon.ico");
     }
 }
 
