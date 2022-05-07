@@ -97,9 +97,14 @@ class MinimizeToTray: Reactor.Component {
         var cls = enabled ? "selected" : "";
         return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;
     }
-    
+
     function onClick() {
         handler.set_local_option("enable-tray", handler.get_local_option("enable-tray") == "Y" ? "" : "Y");
+        if (handler.get_local_option("enable-tray") == "Y") {
+            Tray.init(true, "RustDesk", "../tray-icon.ico");
+        } else {
+            Tray.init(false);
+        }
         this.update();
     }
 }
@@ -803,7 +808,9 @@ function self.ready() {
     if (!handler.get_remote_id()) {
         view.focus = $(#remote_id);
     }
-    Tray.init(true, "RustDesk", "../tray-icon.ico");
+    if (handler.get_local_option("enable-tray") == "Y") {
+        Tray.init(true, "RustDesk", "../tray-icon.ico");
+    }
 }
 
 view.root << event closerequest(evt) {
