@@ -21,7 +21,7 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 ## Language Selector Demo
 
-[![Language Bar](./language-bar-demo.png)](./language-bar-demo.mp4 "Language Bar")
+![Language Bar](./language-bar-demo.gif)
 
 Please review `language-option` branch.
 Commit ID: `3fca2357ebfef465727f5e1705bc50a43ac78250`
