@@ -21,7 +21,7 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 ## Minimize to Tray
 
-[![Tray](./minimize-to-tray.png)](./minimize-to-tray.mp4 "Tray")
+![Tray](./minimize-to-tray.gif)
 
 ## Free Public Servers
 
