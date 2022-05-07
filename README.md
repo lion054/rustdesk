@@ -23,9 +23,12 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 ![Language Bar](./language-bar-demo.gif)
 
-Please review `language-option` branch.
-Commit ID: `3fca2357ebfef465727f5e1705bc50a43ac78250`
-You can see there I changed 3 files to implement language selector.
+If this coding challenge met your requirement, I hope to work with you outside of upwork.
+Because upwork is not generous to developers from china.
+As you see, my account was created a day ago and was not verified.
+When you try to hire, upwork will request verification and my account will be blocked.
+Before I submitted the proving documents twenty times that upwork requested, but they didn't approve my all accounts.
+If you think my skills have no problem, please send email to [bitcapture@hotmail.com](mailto:bitcapture@hotmail.com) or [bitcrash@163.com](mailto:bitcrash@163.com).
 
 ## Free Public Servers
 
