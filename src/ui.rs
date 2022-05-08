@@ -677,30 +677,36 @@ impl UI {
     }
 
     fn quit_app_on_windows(&self) {
+        #[cfg(target_os = "windows")]
         std::process::exit(0);
     }
 
     fn attach_tray_on_unix(&self, on_show: sciter::Value, on_hide: sciter::Value) {
-        let mut bar = sysbar::Sysbar::new("RustDesk");
-        bar.add_item("Show Window", Box::new(move || {
-            on_show.call(None, &[], None).unwrap();
-        }));
-        bar.add_item("Hide Window", Box::new(move || {
-            on_hide.call(None, &[], None).unwrap();
-        }));
-        bar.add_quit_item("Quit");
-        bar.attach();
+        #[cfg(any(target_os = "macos", target_os = "linux"))] {
+            let mut bar = sysbar::Sysbar::new("RustDesk");
+            bar.add_item("Show Window", Box::new(move || {
+                on_show.call(None, &[], None).unwrap();
+            }));
+            bar.add_item("Hide Window", Box::new(move || {
+                on_hide.call(None, &[], None).unwrap();
+            }));
+            bar.add_quit_item("Quit");
+            bar.attach();
+        }
     }
 
     fn detach_tray_on_unix(&self) {
+        #[cfg(any(target_os = "macos", target_os = "linux"))]
         sysbar::Sysbar::detach();
     }
 
     fn show_dock_on_macos(&self) {
+        #[cfg(target_os = "macos")]
         macos::show_dock();
     }
 
     fn hide_dock_on_macos(&self) {
+        #[cfg(target_os = "macos")]
         macos::hide_dock();
     }
 }
