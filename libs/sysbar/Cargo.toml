@@ -1,0 +1,24 @@
+[package]
+name = "sysbar"
+version = "0.3.0"
+authors = [
+    "John Quigley <jmquigs@gmail.com>",
+    "Corey Farwell <coreyf@rwell.org>",
+]
+description = "Library for interacting with the system's taskbar / tray / statusbar "
+license = "MIT/Apache-2.0"
+repository = "https://github.com/rust-sysbar/rust-sysbar"
+edition = "2018"
+
+[dependencies]
+
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.24"
+objc = "0.2"
+core-graphics = "0.22.0"
+objc-foundation = "0.1"
+objc_id = "0.1"
+libc = "0.2"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+ksni = "0.2"

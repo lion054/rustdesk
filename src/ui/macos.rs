@@ -228,6 +228,12 @@ pub fn show_dock() {
     }
 }
 
+pub fn hide_dock() {
+    unsafe {
+        NSApp().setActivationPolicy_(NSApplicationActivationPolicyProhibited);
+    }
+}
+
 pub fn make_tray() {
     unsafe {
         set_delegate(None);

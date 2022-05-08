@@ -676,8 +676,32 @@ impl UI {
         crate::platform::is_xfce()
     }
 
-    fn quit_app(&self) {
+    fn quit_app_on_windows(&self) {
         std::process::exit(0);
+    }
+
+    fn attach_tray_on_unix(&self, on_show: sciter::Value, on_hide: sciter::Value) {
+        let mut bar = sysbar::Sysbar::new("RustDesk");
+        bar.add_item("Show Window", Box::new(move || {
+            on_show.call(None, &[], None).unwrap();
+        }));
+        bar.add_item("Hide Window", Box::new(move || {
+            on_hide.call(None, &[], None).unwrap();
+        }));
+        bar.add_quit_item("Quit");
+        bar.attach();
+    }
+
+    fn detach_tray_on_unix(&self) {
+        sysbar::Sysbar::detach();
+    }
+
+    fn show_dock_on_macos(&self) {
+        macos::show_dock();
+    }
+
+    fn hide_dock_on_macos(&self) {
+        macos::hide_dock();
     }
 }
 
@@ -685,7 +709,11 @@ impl sciter::EventHandler for UI {
     sciter::dispatch_script_call! {
         fn t(String);
         fn is_xfce();
-        fn quit_app();
+        fn quit_app_on_windows();
+        fn attach_tray_on_unix(Value, Value);
+        fn detach_tray_on_unix();
+        fn show_dock_on_macos();
+        fn hide_dock_on_macos();
         fn get_id();
         fn get_password();
         fn update_password(String);

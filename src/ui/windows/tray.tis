@@ -93,7 +93,7 @@ view << event trayicon-click(evt) {
             });
             Tray.menu.root.on("click", "#exit", () => {
                 Tray.init(false);
-                handler.quit_app();
+                handler.quit_app_on_windows();
             });
             Tray.menu.on("activate", (as) => {
                 if (as === false) {
