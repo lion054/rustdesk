@@ -19,6 +19,22 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 [**BINARY DOWNLOAD**](https://github.com/rustdesk/rustdesk/releases)
 
+## UI-inline Build
+
+Currently, when using `cargo build` to create a binary of RustDesk, the `\src\ui\` folder must be in the same directory as the `rustdesk.exe` file.
+
+Needed the feature packing `ui` folder into binary executable.
+The `inline` feature was implemented originally.
+The following is a way to build under inline mode.
+
+1. Apply [these changes](https://github.com/rustdesk/rustdesk/pull/240). They were applied to `packui` branch of this repo already.
+2. Download [sciter-sdk](https://github.com/c-smile/sciter-sdk.git) and append `bin` directory (one of `bin.win`, `bin.osx` or `bin.lnx`) to `PATH` environment variable. That directory contains `packfolder` executable.
+3. Run this file: `src/makerc.bat`. All html/css/tis files will be packed into `src/resources.rc` file.
+4. Install python3 and run this command in project root directory: `python3 build.py`
+5. The `RustsDesk.exe` will be built in `target/release` and it will be duplicated to `rustdesk-1.1.9-putes.exe` in root directory. These files have its own icon, unlike debug executable.
+
+Gathered all these commands into `zbuild.bat` file of root directory.
+
 ## Free Public Servers
 
 Below are the servers you are using for free, it may change along the time. If you are not close to one of these, your network may be slow.
