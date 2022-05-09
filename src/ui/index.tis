@@ -786,7 +786,7 @@ function self.ready() {
     }
     if (handler.get_local_option("enable-tray") == "Y") {
         if (is_win) Tray.init(true, "RustDesk", "../tray-icon.ico");
-        if (is_osx) {
+        if (is_osx || is_linux) {
             self.timer(0.3s, function() {
                 function onShow() {
                     if (is_osx) handler.show_dock_on_macos();
@@ -827,10 +827,10 @@ class MinimizeToTray: Reactor.Component {
                 if (is_osx) handler.hide_dock_on_macos();
                 view.state = View.WINDOW_HIDDEN;
             }
-            if (is_osx) handler.attach_tray_on_unix(onShow, onHide);
+            if (is_osx || is_linux) handler.attach_tray_on_unix(onShow, onHide);
         } else {
             if (is_win) Tray.init(false);
-            if (is_osx) handler.detach_tray_on_unix();
+            if (is_osx || is_linux) handler.detach_tray_on_unix();
         }
         this.update();
     }

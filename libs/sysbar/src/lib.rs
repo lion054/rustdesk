@@ -29,14 +29,6 @@ impl Sysbar {
     pub fn detach() {
         SysbarImpl::detach()
     }
-
-    pub fn show_window() {
-        SysbarImpl::show_window()
-    }
-
-    pub fn hide_window() {
-        SysbarImpl::hide_window()
-    }
 }
 
 #[cfg(target_os = "macos")]

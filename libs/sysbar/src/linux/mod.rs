@@ -6,6 +6,12 @@ struct MyTray {
 }
 
 impl ksni::Tray for MyTray {
+    fn icon_name(&self) -> String {
+        "help-about".into()
+    }
+    fn title(&self) -> String {
+        { "MyTray" }.into()
+    }
     fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
         let mut menu_items = Vec::new();
         for entry in self.menu.clone().into_iter() {
@@ -19,6 +25,9 @@ impl ksni::Tray for MyTray {
             menu_items.push(item);
         }
         menu_items
+    }
+    fn id(&self) -> String {
+        "mytray".to_string()
     }
 }
 
@@ -58,9 +67,7 @@ impl LinuxSysbar {
         }
     }
 
-    pub fn detach() {}
-
-    pub fn show_window() {}
-
-    pub fn hide_window() {}
+    pub fn detach() {
+        std::thread::current().unpark();
+    }
 }

@@ -109,10 +109,6 @@ impl MacOsSysbar {
             NSStatusBar::systemStatusBar(nil).removeStatusItem_(TRAY_ITEM);
         }
     }
-
-    pub fn show_window() {}
-
-    pub fn hide_window() {}
 }
 
 // this code is pretty much a rip off of
