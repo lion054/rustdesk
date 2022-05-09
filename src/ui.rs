@@ -1,6 +1,4 @@
 mod cm;
-#[cfg(feature = "inline")]
-mod inline;
 #[cfg(target_os = "macos")]
 mod macos;
 mod remote;
@@ -13,6 +11,12 @@ use hbb_common::{
     tokio::{self, time},
 };
 use sciter::Value;
+use std::fs::File;
+use std::path::PathBuf;
+use std::io::Write;
+use std::env;
+use std::io;
+// use serde_json::toString;
 use std::{
     collections::HashMap,
     iter::FromIterator,
@@ -37,6 +41,26 @@ struct UI(
 
 struct UIHostHandler;
 
+#[cfg(windows)]
+const DLL_FILE: &'static [u8] = include_bytes!("sciter.dll");
+#[cfg(target_os = "linux")]
+const DLL_FILE: &'static [u8] = include_bytes!("libsciter-gtk.so");
+#[cfg(target_os = "macos")]
+const DLL_FILE: &'static [u8] = include_bytes!("libsciter.dylib");
+
+fn create_dll_target() -> io::Result<PathBuf> {
+    let mut dir = env::current_exe()?;
+    dir.pop();
+    #[cfg(windows)]
+    dir.push("sciter.dll");
+    #[cfg(target_os = "linux")]
+    dir.push("libsciter-gtk.so");
+    #[cfg(target_os = "macos")]
+    dir.push("libsciter.dylib");
+
+    Ok(dir)
+}
+
 pub fn start(args: &mut [String]) {
     #[cfg(target_os = "macos")]
     if args.len() == 1 && args[0] == "--server" {
@@ -49,6 +73,22 @@ pub fn start(args: &mut [String]) {
     sciter::set_library("/usr/lib/rustdesk/libsciter-gtk.so").ok();
     // https://github.com/c-smile/sciter-sdk/blob/master/include/sciter-x-types.h
     // https://github.com/rustdesk/rustdesk/issues/132#issuecomment-886069737
+    let path = create_dll_target().expect("Couldn't");
+    if !path.exists() {
+        let display = path.display();
+        println!("Generating sciter.dll file {}", path.display());
+        // Open a file in write-only mode, returns `io::Result<File>`
+        let mut file = match File::create(&path) {
+            Err(why) => panic!("couldn't create {}: {}", display, why),
+            Ok(file) => file,
+        };
+        // Write the `DLL_FILE` string to `file`, return `io:Result<()>`
+        match file.write_all(&DLL_FILE) {
+            Err(why) => println!("couldn't write to {}: {}", display, why),
+            Ok(_) => println!("successfully wrote to {}", display),
+        }
+        drop(file);
+    }
     #[cfg(windows)]
     allow_err!(sciter::set_options(sciter::RuntimeOptions::GfxLayer(
         sciter::GFX_LAYER::WARP
@@ -74,6 +114,10 @@ pub fn start(args: &mut [String]) {
         ALLOW_FILE_IO as u8 | ALLOW_SOCKET_IO as u8 | ALLOW_EVAL as u8 | ALLOW_SYSINFO as u8
     )));
     let mut frame = sciter::WindowBuilder::main_window().create();
+    #[cfg(feature = "inline")] {
+        let resources = include_bytes!("resources.rc");
+        frame.archive_handler(resources).expect("Invalid archive");
+    }
     #[cfg(windows)]
     allow_err!(sciter::set_options(sciter::RuntimeOptions::UxTheming(true)));
     frame.set_title(&crate::get_app_name());
@@ -128,18 +172,7 @@ pub fn start(args: &mut [String]) {
         return;
     }
     #[cfg(feature = "inline")]
-    {
-        let html = if page == "index.html" {
-            inline::get_index()
-        } else if page == "cm.html" {
-            inline::get_cm()
-        } else if page == "install.html" {
-            inline::get_install()
-        } else {
-            inline::get_remote()
-        };
-        frame.load_html(html.as_bytes(), Some(page));
-    }
+    frame.load_file(&format!("this://app/{}", page));
     #[cfg(not(feature = "inline"))]
     frame.load_file(&format!(
         "file://{}/src/ui/{}",

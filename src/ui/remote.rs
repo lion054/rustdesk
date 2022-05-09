@@ -664,9 +664,6 @@ impl Handler {
     }
 
     fn get_chatbox(&mut self) -> String {
-        #[cfg(feature = "inline")]
-        return super::inline::get_chatbox();
-        #[cfg(not(feature = "inline"))]
         return "".to_owned();
     }
 

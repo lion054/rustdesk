@@ -142,7 +142,8 @@ class SessionList: Reactor.Component {
                 </div>
             </div>;
         }
-        return <div .remote-session-link .remote-session id={id} platform={platform} title={alias ? "ID: " + id : ""} style={"background:"+string2RGB(id+platform, 0.5)}>
+        // return <div .remote-session-link .remote-session id={id} platform={platform} title={alias ? "ID: " + id : ""} style={"background:"+string2RGB(id+platform, 0.5)}>
+        return <div .remote-session-link .remote-session id={id} platform={platform}>
             <div .platform>
                 {platform && platformSvg(platform, "white")}
                 <div .username .ellipsis>{username}@{hostname}</div>

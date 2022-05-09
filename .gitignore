@@ -6,6 +6,9 @@ src/ui/inline.rs
 extractor
 __pycache__
 src/version.rs
+src/sciter.dll
+src/libsciter.dylib
+src/libsciter-gtk.so
+src/resources.rc
 *dmg
-sciter.dll
 **pdb

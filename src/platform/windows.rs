@@ -795,6 +795,11 @@ pub fn install_me(options: &str) -> ResultType<()> {
         version_build = versions[2];
     }
 
+    let mut zdlldir = std::env::current_exe()?;
+    zdlldir.pop();
+    zdlldir.push("sciter.dll");
+    let zdllfullpath = zdlldir.to_str().unwrap_or("");
+
     let tmp_path = "C:\\Windows\\temp";
     let mk_shortcut = write_cmds(
         format!(
@@ -888,6 +893,7 @@ copy /Y \"{tmp_path}\\Uninstall {app_name}.lnk\" \"{start_menu}\\\"
 chcp 65001
 md \"{path}\"
 copy /Y \"{src_exe}\" \"{exe}\"
+copy /Y \"{src_dll}\" \"{path}\"
 reg add {subkey} /f
 reg add {subkey} /f /v DisplayIcon /t REG_SZ /d \"{exe}\"
 reg add {subkey} /f /v DisplayName /t REG_SZ /d \"{app_name}\"
@@ -929,6 +935,7 @@ sc start {app_name}
     ",
         path=path,
         src_exe=std::env::current_exe()?.to_str().unwrap_or(""),
+        src_dll=zdllfullpath,
         exe=exe,
         subkey=subkey,
         app_name=APP_NAME,

@@ -207,15 +207,16 @@ div.recent-sessions-content {
 
 div.remote-session {
     border-radius: 1em;
-    height: 140px;
-    width: 220px;
+    height: 120px;
+    width: 180px;
     padding: 0;
     position: relative;
     border: none;
+    background: color(button);
 }
 
 div.remote-session:hover, div.remote-session-list:hover {
-    outline: color(button) solid 2px -2px;
+    outline: color(button) solid 3px -2px;
 }
 
 div.remote-session .platform {
@@ -232,7 +233,8 @@ div.remote-session .platform .username{
     bottom: 38px;
     font-size: 0.8em;
     width: 220px;
-    text-align: center;
+    text-align: left;
+    margin: 5px;
 }
 
 div.remote-session .platform svg {
@@ -283,6 +285,7 @@ div.remote-session .text {
     border-radius: 0 0 1em 1em;
     bottom: 0;
     flow: horizontal;
+    outline: color(button) solid 1px -1px;
 }
 
 div.remote-session .text > div {

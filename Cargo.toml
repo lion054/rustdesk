@@ -62,7 +62,7 @@ rdev = { git = "https://github.com/open-trade/rdev" }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 systray = { git = "https://github.com/liyue201/systray-rs" }
-winapi = { version = "0.3", features = ["winuser"] }
+winapi = { version = "0.3", features = ["wincon", "winuser"] }
 winreg = "0.10"
 windows-service = "0.4"
 
@@ -114,7 +114,8 @@ resources = ["mac-tray.png"]
 #!!! rembember call "strip target/release/rustdesk"
 # which reduce binary size a lot
 [profile.release]
-#lto = true
-#codegen-units = 1
+lto = true
+codegen-units = 1
 #panic = 'abort'
-#opt-level = 'z' # only have smaller size after strip
+#strip = true
+opt-level = 'z' # only have smaller size after strip
