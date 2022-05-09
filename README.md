@@ -21,7 +21,19 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 ## Minimize to Tray
 
-![Tray](./minimize-to-tray.gif)
+### Windows
+
+![Tray](./minimize-to-tray-windows.gif)
+
+### MacOS
+
+![Tray](./minimize-to-tray-macos.gif)
+
+### Linux
+
+In order to implement system tray, the library `sysbar` uses `cocoa` on MacOS, `ksni` on Linux.
+`ksni` works no longer on Gnome mode of Linux.
+So now `Minimize to Tray` doesn't work on Linux Gnome mode.
 
 ## Free Public Servers
 
