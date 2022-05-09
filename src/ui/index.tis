@@ -144,6 +144,40 @@ class AudioInputs: Reactor.Component {
     }
 }
 
+var minimize_to_tray;
+class MinimizeToTray: Reactor.Component {
+    function this() {
+        minimize_to_tray = this;
+    }
+
+    function render() {
+        var text = translate("Minimize to Tray");
+        var enabled = handler.get_local_option("enable-tray") == "Y";
+        var cls = enabled ? "selected" : "";
+        return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;
+    }
+
+    function onClick() {
+        handler.set_local_option("enable-tray", handler.get_local_option("enable-tray") == "Y" ? "" : "Y");
+        if (handler.get_local_option("enable-tray") == "Y") {
+            if (is_win) Tray.init(true, "RustDesk", "../tray-icon.ico");
+            function onShow() {
+                if (is_osx) handler.show_dock_on_macos();
+                view.state = View.WINDOW_SHOWN;
+            }
+            function onHide() {
+                if (is_osx) handler.hide_dock_on_macos();
+                view.state = View.WINDOW_HIDDEN;
+            }
+            if (is_osx || is_linux) handler.attach_tray_on_unix(onShow, onHide);
+        } else {
+            if (is_win) Tray.init(false);
+            if (is_osx || is_linux) handler.detach_tray_on_unix();
+        }
+        this.update();
+    }
+}
+
 class MyIdMenu: Reactor.Component {
     function this() {
         myIdMenu = this;
@@ -796,43 +830,11 @@ function self.ready() {
                     if (is_osx) handler.hide_dock_on_macos();
                     view.state = View.WINDOW_HIDDEN;
                 }
-                handler.attach_tray_on_unix(onShow, onHide);
+                if (is_osx) { // error on linux, TODO: ksni is working on kde, not gnome
+                    handler.attach_tray_on_unix(onShow, onHide);
+                }
             });
         }
-    }
-}
-
-var minimize_to_tray;
-class MinimizeToTray: Reactor.Component {
-    function this() {
-        minimize_to_tray = this;
-    }
-
-    function render() {
-        var text = translate("Minimize to Tray");
-        var enabled = handler.get_local_option("enable-tray") == "Y";
-        var cls = enabled ? "selected" : "";
-        return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;
-    }
-
-    function onClick() {
-        handler.set_local_option("enable-tray", handler.get_local_option("enable-tray") == "Y" ? "" : "Y");
-        if (handler.get_local_option("enable-tray") == "Y") {
-            if (is_win) Tray.init(true, "RustDesk", "../tray-icon.ico");
-            function onShow() {
-                if (is_osx) handler.show_dock_on_macos();
-                view.state = View.WINDOW_SHOWN;
-            }
-            function onHide() {
-                if (is_osx) handler.hide_dock_on_macos();
-                view.state = View.WINDOW_HIDDEN;
-            }
-            if (is_osx || is_linux) handler.attach_tray_on_unix(onShow, onHide);
-        } else {
-            if (is_win) Tray.init(false);
-            if (is_osx || is_linux) handler.detach_tray_on_unix();
-        }
-        this.update();
     }
 }
 
