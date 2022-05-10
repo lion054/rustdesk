@@ -10,6 +10,6 @@ src/sciter.dll
 src/libsciter.dylib
 src/libsciter-gtk.so
 src/resources.rc
-*dmg
-**pdb
-rustdesk-*-putes.exe
+*.dmg
+*.pdb
+*.exe

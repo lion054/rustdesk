@@ -50,7 +50,7 @@ def main():
             os.system(
                 'strip target/release/bundle/osx/RustDesk.app/Contents/MacOS/rustdesk')
             os.system(
-                'cp libsciter.dylib target/release/bundle/osx/RustDesk.app/Contents/MacOS/')
+                'cp src/libsciter.dylib target/release/bundle/osx/RustDesk.app/Contents/MacOS/')
             # https://github.com/sindresorhus/create-dmg
             os.system('/bin/rm -rf *.dmg')
             plist = "target/release/bundle/osx/RustDesk.app/Contents/Info.plist"
@@ -71,7 +71,7 @@ def main():
 codesign -s "Developer ID Application: {0}" --force --options runtime  ./target/release/bundle/osx/RustDesk.app/Contents/MacOS/*
 codesign -s "Developer ID Application: {0}" --force --options runtime  ./target/release/bundle/osx/RustDesk.app
 '''.format(pa))
-            os.system('create-dmg target/release/bundle/osx/RustDesk.app')
+            os.system('create-dmg "RustDesk %s.dmg" target/release/bundle/osx/RustDesk.app'%version)
             os.rename('RustDesk %s.dmg'%version, 'rustdesk-%s.dmg'%version)
             if pa:
               os.system('''
@@ -93,7 +93,7 @@ rcodesign notarize --api-issuer 69a6de7d-2907-47e3-e053-5b8c7c11a4d1 --api-key 9
             os.system('cp DEBIAN/* tmpdeb/DEBIAN/')
             os.system('strip tmpdeb/usr/bin/rustdesk')
             os.system('mkdir -p tmpdeb/usr/lib/rustdesk')
-            os.system('cp libsciter-gtk.so tmpdeb/usr/lib/rustdesk/')
+            os.system('cp src/libsciter-gtk.so tmpdeb/usr/lib/rustdesk/')
             md5_file('usr/share/rustdesk/files/systemd/rustdesk.service')
             md5_file('usr/share/rustdesk/files/pynput_service.py')
             md5_file('usr/lib/rustdesk/libsciter-gtk.so')

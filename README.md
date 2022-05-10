@@ -30,8 +30,20 @@ The following is a way to build under inline mode.
 1. Apply [these changes](https://github.com/rustdesk/rustdesk/pull/240). They were applied to `packui` branch of this repo already.
 2. Download [sciter-sdk](https://github.com/c-smile/sciter-sdk.git) and append `bin` directory (one of `bin.win`, `bin.osx` or `bin.lnx`) to `PATH` environment variable. That directory contains `packfolder` executable.
 3. Run this file: `src/makerc.bat`. All html/css/tis files will be packed into `src/resources.rc` file.
-4. Install python3 and run this command in project root directory: `python3 build.py`
-5. The `RustsDesk.exe` will be built in `target/release` and it will be duplicated to `rustdesk-1.1.9-putes.exe` in root directory. These files have its own icon, unlike debug executable.
+4. In case of MacOS:
+  - Run `cargo install cargo-bundle` to install `cargo bundle`.
+  - Fix some paths in build.py.
+`libsciter.dylib` -> `src/libsciter.dylib`
+`libsciter-gtk.so` -> `src/libsciter-gtk.so`
+  - Run `brew install create-dmg`.
+  - Add output filename to create-dmg parameters in `build.py`.
+`os.system('create-dmg target/release/bundle/osx/RustDesk.app')` -> `os.system('create-dmg "RustDesk %s.dmg" target/release/bundle/osx/RustDesk.app'%version)`
+8. Install python3 and run this command in project root directory: `python3 build.py`
+9. In case of Windows:
+  - The `RustsDesk.exe` will be built in `target/release` and it will be duplicated to `rustdesk-1.1.9-putes.exe` in root directory.
+  - These files have its own icon, unlike debug executable.
+10. In case of MacOS:
+  - The `rustsdesk` executable will be built in `target/release` and `rustdesk-1.1.9.dmg` will be created in root directory.
 
 Gathered all these commands into `zbuild.bat` file of root directory.
 
