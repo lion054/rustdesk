@@ -38,12 +38,24 @@ The following is a way to build under inline mode.
   - Run `brew install create-dmg`.
   - Add output filename to create-dmg parameters in `build.py`.
 `os.system('create-dmg target/release/bundle/osx/RustDesk.app')` -> `os.system('create-dmg "RustDesk %s.dmg" target/release/bundle/osx/RustDesk.app'%version)`
-8. Install python3 and run this command in project root directory: `python3 build.py`
-9. In case of Windows:
+5. In case of Linux:
+  - Run `cargo install cargo-bundle` to install `cargo bundle`.
+  - Run `sudo yum install dpkg` to install `dpkg`.
+  - Run the following commands for executables in `DEBIAN` directory. They were applied to `packui` branch of this repo already.
+```
+chmod 775 preinst
+chmod 775 prerm
+chmod 775 postinst
+chmod 775 postrm
+```
+6. Install python3 and run this command in project root directory: `python3 build.py`
+7. In case of Windows:
   - The `RustsDesk.exe` will be built in `target/release` and it will be duplicated to `rustdesk-1.1.9-putes.exe` in root directory.
   - These files have its own icon, unlike debug executable.
-10. In case of MacOS:
+8. In case of MacOS:
   - The `rustsdesk` executable will be built in `target/release` and `rustdesk-1.1.9.dmg` will be created in root directory.
+9. In case of Linux:
+  - The `rustsdesk` executable will be built in `target/release` and `rustdesk-1.1.9.deb` will be created in root directory.
 
 Gathered all these commands into `zbuild.bat` file of root directory.
 

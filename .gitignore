@@ -12,4 +12,5 @@ src/libsciter-gtk.so
 src/resources.rc
 *.dmg
 *.pdb
-*.exe
+rustdesk-*.exe
+rustdesk-*.deb
