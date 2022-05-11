@@ -267,5 +267,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Account", "Аккаунт"),
         ("Quit", "Выйти"),
         ("Help", "Помощь"),
+        ("Enable 2FA", "Включить двухфакторную аутентификацию"),
     ].iter().cloned().collect();
 }

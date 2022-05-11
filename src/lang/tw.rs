@@ -268,5 +268,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Quit", "退出"),
         ("doc_mac_permission", "https://rustdesk.com/docs/zh-tw/manual/mac/#啟用權限"),
         ("Help", "幫助"),
+        ("Enable 2FA", "啟用雙重身份驗證"),
     ].iter().cloned().collect();
 }

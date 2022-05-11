@@ -85,6 +85,25 @@ class DirectServer: Reactor.Component {
     }
 }
 
+var two_factor_auth;
+class TwoFactorAuth: Reactor.Component {
+    function this() {
+        two_factor_auth = this;
+    }
+
+    function render() {
+        var text = translate("Enable 2FA");
+        var enabled = handler.get_option("two-factor-auth") == "Y";
+        var cls = enabled ? "selected" : "";
+        return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;
+    }
+
+    function onClick() {
+        handler.set_option("two-factor-auth", handler.get_option("two-factor-auth") == "Y" ? "" : "Y");
+        this.update();
+    }
+}
+
 var myIdMenu;
 var audioInputMenu;
 class AudioInputs: Reactor.Component {
@@ -172,6 +191,7 @@ class MyIdMenu: Reactor.Component {
                 <div .separator />
                 <li #stop-service><span>{svg_checkmark}</span>{translate("Enable Service")}</li>
                 <DirectServer />
+                <TwoFactorAuth />
                 <div .separator />
                 <li #about>{translate('About')} {" "} {handler.get_app_name()}</li>
             </menu>
@@ -186,6 +206,7 @@ class MyIdMenu: Reactor.Component {
         audioInputMenu.update({ show: true });
         this.toggleMenuState();
         if (direct_server) direct_server.update();
+        if (two_factor_auth) two_factor_auth.update();
         var menu = this.$(menu#config-options);
         this.$(svg#menu).popup(menu);
     }
