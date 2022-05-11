@@ -92,7 +92,7 @@ class WakeOnLan: Reactor.Component {
     }
 
     function render() {
-        var text = translate("Enable Wake on Lan");
+        var text = translate("Enable Wake on LAN");
         var enabled = handler.get_local_option("wake-on-lan") == "Y";
         var cls = enabled ? "selected" : "";
         return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;

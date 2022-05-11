@@ -267,5 +267,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Account", "Conta"),
         ("Quit", "Saída"),
         ("Help", "Ajuda"),
+        ("Enable Wake on LAN", "Ativar Wake on LAN"),
     ].iter().cloned().collect();
 }
