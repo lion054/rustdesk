@@ -301,6 +301,7 @@ impl RendezvousMediator {
         let mut rr = RelayResponse {
             socket_addr,
             version: crate::VERSION.to_owned(),
+            mac_addr: get_mac(),
             ..Default::default()
         };
         if initiate {

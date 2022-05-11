@@ -8,7 +8,7 @@ use hbb_common::{
     allow_err,
     anyhow::{anyhow, Context},
     bail,
-    config::{Config, PeerConfig, PeerInfoSerde, CONNECT_TIMEOUT, RELAY_PORT, RENDEZVOUS_TIMEOUT},
+    config::{Config, LocalConfig, PeerConfig, PeerInfoSerde, CONNECT_TIMEOUT, RELAY_PORT, RENDEZVOUS_TIMEOUT},
     log,
     message_proto::{option_message::BoolOption, *},
     protobuf::Message as _,
@@ -116,6 +116,19 @@ impl Client {
     }
 
     async fn _start(peer: &str, conn_type: ConnType) -> ResultType<(Stream, bool)> {
+        // try "wake on lan"
+        if LocalConfig::get_option("wake-on-lan") == "Y" {
+            let mac_addr = PeerConfig::load(peer).mac_addr;
+            if !mac_addr.is_empty() {
+                let wol = wakey::WolPacket::from_string(&mac_addr, ':');
+                let res = wol.send_magic();
+                if res.is_ok() {
+                    log::info!("Wake on LAN succeeded");
+                } else if res.is_err() {
+                    log::error!("Wake on LAN failed");
+                }
+            }
+        }
         // to-do: remember the port for each peer, so that we can retry easier
         let any_addr = Config::get_any_listen_addr();
         if crate::is_ip(peer) {
@@ -188,6 +201,10 @@ impl Client {
                             }
                         }
                         Some(rendezvous_message::Union::relay_response(rr)) => {
+                            // save peer's mac address
+                            let mut config = PeerConfig::load(peer);
+                            config.mac_addr = rr.mac_addr.clone();
+                            config.store(peer);
                             log::info!(
                                 "relay requested from peer, time used: {:?}, relay_server: {}",
                                 start.elapsed(),
@@ -432,6 +449,10 @@ impl Client {
                             bail!(rs.refuse_reason);
                         }
                         succeed = true;
+                        // save peer's mac address
+                        let mut config = PeerConfig::load(peer);
+                        config.mac_addr = rs.mac_addr;
+                        config.store(peer);
                         break;
                     }
                 }

@@ -135,6 +135,8 @@ pub struct PeerConfig {
     pub disable_clipboard: bool,
     #[serde(default)]
     pub enable_file_transfer: bool,
+    #[serde(default)]
+    pub mac_addr: String,
 
     // the other scalar value must before this
     #[serde(default)]

@@ -112,6 +112,7 @@ message RelayResponse {
   }
   string refuse_reason = 6;
   string version = 7;
+  string mac_addr = 8;
 }
 
 message SoftwareUpdate { string url = 1; }

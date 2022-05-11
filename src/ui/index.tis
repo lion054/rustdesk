@@ -85,6 +85,25 @@ class DirectServer: Reactor.Component {
     }
 }
 
+var wake_on_lan;
+class WakeOnLan: Reactor.Component {
+    function this() {
+        wake_on_lan = this;
+    }
+
+    function render() {
+        var text = translate("Enable Wake on Lan");
+        var enabled = handler.get_local_option("wake-on-lan") == "Y";
+        var cls = enabled ? "selected" : "";
+        return <li class={cls}><span>{svg_checkmark}</span>{text}</li>;
+    }
+
+    function onClick() {
+        handler.set_local_option("wake-on-lan", handler.get_local_option("wake-on-lan") == "Y" ? "" : "Y");
+        this.update();
+    }
+}
+
 var myIdMenu;
 var audioInputMenu;
 class AudioInputs: Reactor.Component {
@@ -172,6 +191,7 @@ class MyIdMenu: Reactor.Component {
                 <div .separator />
                 <li #stop-service><span>{svg_checkmark}</span>{translate("Enable Service")}</li>
                 <DirectServer />
+                <WakeOnLan />
                 <div .separator />
                 <li #about>{translate('About')} {" "} {handler.get_app_name()}</li>
             </menu>
@@ -186,6 +206,7 @@ class MyIdMenu: Reactor.Component {
         audioInputMenu.update({ show: true });
         this.toggleMenuState();
         if (direct_server) direct_server.update();
+        if (wake_on_lan) wake_on_lan.update();
         var menu = this.$(menu#config-options);
         this.$(svg#menu).popup(menu);
     }
