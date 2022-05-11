@@ -19,6 +19,10 @@ RustDesk welcomes contribution from everyone. See [`CONTRIBUTING.md`](CONTRIBUTI
 
 [**BINARY DOWNLOAD**](https://github.com/rustdesk/rustdesk/releases)
 
+## Wake on LAN
+
+![Demo](wake-on-lan.gif "Wake on LAN demo")
+
 ## Free Public Servers
 
 Below are the servers you are using for free, it may change along the time. If you are not close to one of these, your network may be slow.
